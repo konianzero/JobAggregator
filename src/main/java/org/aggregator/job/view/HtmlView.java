@@ -1,7 +1,5 @@
 package org.aggregator.job.view;
 
-import org.aggregator.job.Controller;
-import org.aggregator.job.vo.Vacancy;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -10,9 +8,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
+
+import org.aggregator.job.Controller;
+import org.aggregator.job.vo.Vacancy;
 
 public class HtmlView implements View {
-    private final String filePath = "./4.JavaCollections/src/" + this.getClass().getPackage().getName().replace('.', '/') + "/vacancies.html";
+    private final String filePath = "src/main/java/" + this.getClass().getPackage().getName().replace('.', '/') + "/vacancies.html";
     private Controller controller;
 
     @Override
@@ -35,20 +37,19 @@ public class HtmlView implements View {
 
     private String getUpdatedFileContent(List<Vacancy> vacancies) {
         Document document = null;
-        Element templateCopy = null;
         try {
             document = getDocument();
             // Получи элемент, у которого есть класс template
             Element template = document.getElementsByClass("template").first();
             // Сделай копию этого объекта
-            templateCopy = template.clone();
+            Element templateCopy = template.clone();
             // удали из нее атрибут "style" и класс "template"
             templateCopy.removeAttr("style");
             templateCopy.removeClass("template");
             // Удали все добавленные ранее вакансии. У них единственный класс "vacancy"
             // Но тег tr, у которого class="vacancy template", не удаляй.
             document.select("tr[class=vacancy]").remove().not("tr[class=vacancy template]");
-//            document.select("tr.vacancy").remove().not("tr.vacancy template");
+
             for (Vacancy vacancy : vacancies) {
                 Element localClone = templateCopy.clone();// клонируем шаблон тега
                 localClone.getElementsByClass("city").first().text(vacancy.getCity());
@@ -64,9 +65,8 @@ public class HtmlView implements View {
 
         } catch (IOException ioe) {
             ioe.printStackTrace();
-            return "Some exception occurred";
         }
-        return document.html();
+        return Optional.ofNullable(document).map(Element::html).orElseThrow();
     }
 
     protected Document getDocument() throws IOException {

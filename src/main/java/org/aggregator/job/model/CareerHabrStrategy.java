@@ -1,10 +1,10 @@
 package org.aggregator.job.model;
 
-import org.aggregator.job.vo.Vacancy;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -13,6 +13,8 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.aggregator.job.vo.Vacancy;
 
 public class CareerHabrStrategy implements Strategy {
     private final static String URL_FORMAT = "https://career.habr.com/vacancies?city_id=%s&page=%d&q=java&type=all";
@@ -54,6 +56,7 @@ public class CareerHabrStrategy implements Strategy {
         } catch (IOException ioe) { ioe.printStackTrace(); }
         return doc;
     }
+
     private String getCityId(String searchString) {
         String cityId = null;
         try {

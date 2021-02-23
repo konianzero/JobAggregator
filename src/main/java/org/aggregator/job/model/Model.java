@@ -1,10 +1,10 @@
 package org.aggregator.job.model;
 
-import org.aggregator.job.view.View;
-import org.aggregator.job.vo.Vacancy;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.aggregator.job.view.View;
+import org.aggregator.job.vo.Vacancy;
 
 public class Model {
     private View view;
