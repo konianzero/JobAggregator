@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Вакансии</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<table>
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Site Name</th>
+        <th>City</th>
+        <th>Company Name</th>
+        <th>Salary</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${vacancies.empty}">
+        <td colspan="2"> No Jobs Available </td>
+    </tr>
+    <tr th:each="vacancy : ${vacancies}">
+        <td>
+            <a th:href="${vacancy.getUrl()}" th:text="${vacancy.getTitle()}"> Title </a>
+        </td>
+        <td th:text="${vacancy.getSiteName()}"> Site Name </td>
+        <td th:text="${vacancy.getCity()}"> City </td>
+        <td th:text="${vacancy.getCompanyName()}"> Company Name </td>
+        <td th:text="${vacancy.getSalary()}"> Salary </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
