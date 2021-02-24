@@ -1,5 +1,6 @@
 package org.aggregator.job.model;
 
+import org.aggregator.job.model.strategy.Strategy;
 import org.aggregator.job.vo.Vacancy;
 
 import java.util.List;

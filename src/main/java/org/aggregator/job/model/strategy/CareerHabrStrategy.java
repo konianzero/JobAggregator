@@ -1,4 +1,4 @@
-package org.aggregator.job.model;
+package org.aggregator.job.model.strategy;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -18,6 +18,7 @@ import org.aggregator.job.vo.Vacancy;
 
 public class CareerHabrStrategy implements Strategy {
     private final static String URL_FORMAT = "https://career.habr.com/vacancies?city_id=%s&page=%d&q=java&type=all";
+    private final static String SITE_NAME = "Habr Career";
 
     @Override
     public List<Vacancy> getVacancies(String searchString) {
@@ -39,7 +40,7 @@ public class CareerHabrStrategy implements Strategy {
                 vacancy.setSalary(salary == null ? "" : salary);
                 vacancy.setCity(element.getElementsByClass("vacancy-card__meta").first().child(0).text());
                 vacancy.setCompanyName(element.getElementsByClass("vacancy-card__company-title").text());
-                vacancy.setSiteName(URL_FORMAT);
+                vacancy.setSiteName(SITE_NAME);
                 vacancy.setUrl("https://career.habr.com" + element.getElementsByClass("vacancy-card__title").first().child(0).attr("href"));
 
                 vacancies.add(vacancy);

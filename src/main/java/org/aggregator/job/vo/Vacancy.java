@@ -3,12 +3,12 @@ package org.aggregator.job.vo;
 import java.util.Objects;
 
 public class Vacancy {
-    String title;
-    String salary;
-    String city;
-    String companyName;
-    String siteName;
-    String url;
+    private String title;
+    private String salary;
+    private String city;
+    private String companyName;
+    private String siteName;
+    private String url;
 
     public String getTitle() {
         return title;

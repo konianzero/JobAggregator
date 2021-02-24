@@ -1,4 +1,4 @@
-package org.aggregator.job.model;
+package org.aggregator.job.model.strategy;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -13,14 +13,15 @@ import org.aggregator.job.vo.Vacancy;
 
 public class HHStrategy implements Strategy {
     private final static String URL_FORMAT = "http://hh.ru/search/vacancy?text=java+%s&page=%d";
+    private final static String SITE_NAME = "Head Hunter";
 
     @Override
     public List<Vacancy> getVacancies(String searchString) {
         List<Vacancy> vacancies = new ArrayList<>();
         Document doc;
         int pageNumber = 0;
-        doc = getDocument(searchString, pageNumber);
         while (true) {
+            doc = getDocument(searchString, ++pageNumber);
             Elements vacancyElements = doc.getElementsByAttributeValue("data-qa", "vacancy-serp__vacancy");
             if (vacancyElements.size() == 0) { break; }
 
@@ -33,17 +34,16 @@ public class HHStrategy implements Strategy {
                 vacancy.setSalary(salary == null ? "" : salary);
                 vacancy.setCity(element.getElementsByAttributeValueContaining("data-qa", "address").text());
                 vacancy.setCompanyName(element.getElementsByAttributeValue("data-qa", "vacancy-serp__vacancy-employer").text());
-                vacancy.setSiteName(URL_FORMAT);
+                vacancy.setSiteName(SITE_NAME);
                 vacancy.setUrl(element.getElementsByAttributeValueContaining("data-qa", "title").attr("href"));
 
                 vacancies.add(vacancy);
             }
-            doc = getDocument(searchString, ++pageNumber);
         }
         return vacancies;
     }
 
-    protected Document getDocument(String searchString, int page) {
+    private Document getDocument(String searchString, int page) {
         Document doc = null;
         try {
             doc = Jsoup.connect(String.format(URL_FORMAT, searchString, page))

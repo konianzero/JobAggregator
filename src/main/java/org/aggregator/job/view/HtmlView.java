@@ -25,7 +25,7 @@ public class HtmlView implements View {
     @Override
     public void update(List<Vacancy> vacancies) {
         try {
-            updateFile(getUpdatedFileContent(vacancies));
+            updateFile(updateContent(vacancies));
         } catch (Exception e) { e.printStackTrace(); }
     }
 
@@ -35,7 +35,7 @@ public class HtmlView implements View {
         } catch (IOException ioe) { ioe.printStackTrace(); }
     }
 
-    private String getUpdatedFileContent(List<Vacancy> vacancies) {
+    private String updateContent(List<Vacancy> vacancies) {
         Document document = null;
         try {
             document = getDocument();
@@ -52,6 +52,7 @@ public class HtmlView implements View {
 
             for (Vacancy vacancy : vacancies) {
                 Element localClone = templateCopy.clone();// клонируем шаблон тега
+                localClone.getElementsByClass("siteName").first().text(vacancy.getSiteName());
                 localClone.getElementsByClass("city").first().text(vacancy.getCity());
                 localClone.getElementsByClass("companyName").first().text(vacancy.getCompanyName());
                 localClone.getElementsByClass("salary").first().text(vacancy.getSalary());
