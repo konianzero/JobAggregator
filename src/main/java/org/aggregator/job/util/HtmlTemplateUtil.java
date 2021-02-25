@@ -1,4 +1,4 @@
-package org.aggregator.job.Util;
+package org.aggregator.job.util;
 
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;

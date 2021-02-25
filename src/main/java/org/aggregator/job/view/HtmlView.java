@@ -10,12 +10,12 @@ import java.util.List;
 
 import org.aggregator.job.Controller;
 import org.aggregator.job.vo.Vacancy;
-import org.aggregator.job.Util.HtmlTemplateUtil;
+import org.aggregator.job.util.HtmlTemplateUtil;
 
 public class HtmlView implements View {
     private static final Logger log = LoggerFactory.getLogger(HtmlView.class);
 
-    private final String filePath = "src/main/resources/vacancies.html";
+    private final String filePath = "vacancies.html";
     private Controller controller;
 
     @Override
