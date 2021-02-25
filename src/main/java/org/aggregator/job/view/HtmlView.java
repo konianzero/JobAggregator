@@ -1,5 +1,8 @@
 package org.aggregator.job.view;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -10,6 +13,8 @@ import org.aggregator.job.vo.Vacancy;
 import org.aggregator.job.Util.HtmlTemplateUtil;
 
 public class HtmlView implements View {
+    private static final Logger log = LoggerFactory.getLogger(HtmlView.class);
+
     private final String filePath = "src/main/resources/vacancies.html";
     private Controller controller;
 
@@ -20,9 +25,8 @@ public class HtmlView implements View {
 
     @Override
     public void update(List<Vacancy> vacancies) {
-        try {
-            updateFile(createHTML(vacancies));
-        } catch (Exception e) { e.printStackTrace(); }
+        updateFile(createHTML(vacancies));
+        log.info("Table of vacancies is generated");
     }
 
     private void updateFile(String str) {

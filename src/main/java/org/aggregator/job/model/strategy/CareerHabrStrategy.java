@@ -1,5 +1,8 @@
 package org.aggregator.job.model.strategy;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -17,11 +20,14 @@ import java.util.List;
 import org.aggregator.job.vo.Vacancy;
 
 public class CareerHabrStrategy implements Strategy {
-    private final static String URL_FORMAT = "https://career.habr.com/vacancies?city_id=%s&page=%d&q=java&type=all";
-    private final static String SITE_NAME = "Habr Career";
+    private static final Logger log = LoggerFactory.getLogger(CareerHabrStrategy.class);
+
+    private static final String URL_FORMAT = "https://career.habr.com/vacancies?city_id=%s&page=%d&q=java&type=all";
+    private static final String SITE_NAME = "Habr Career";
 
     @Override
     public List<Vacancy> getVacancies(String searchString) {
+        log.debug("Get vacancies...");
         List<Vacancy> vacancies = new ArrayList<>();
         Document doc;
         int pageNumber = 0;
@@ -46,6 +52,7 @@ public class CareerHabrStrategy implements Strategy {
                 vacancies.add(vacancy);
             }
         }
+        log.info("{} vacancies", vacancies.size());
         return vacancies;
     }
 
