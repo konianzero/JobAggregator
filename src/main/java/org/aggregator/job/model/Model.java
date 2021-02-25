@@ -6,12 +6,14 @@ import java.util.List;
 import org.aggregator.job.view.View;
 import org.aggregator.job.vo.Vacancy;
 
+import static java.util.Objects.isNull;
+
 public class Model {
     private View view;
     private Provider[] providers;
 
     public Model(View view, Provider... providers) {
-        if (view == null || providers == null || providers.length == 0) { throw new IllegalArgumentException(); }
+        if (isNull(view) || isNull(providers) || providers.length == 0) { throw new IllegalArgumentException(); }
 
         this.view = view;
         this.providers = providers;

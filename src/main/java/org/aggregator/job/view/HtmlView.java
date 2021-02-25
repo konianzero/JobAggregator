@@ -12,6 +12,8 @@ import org.aggregator.job.Controller;
 import org.aggregator.job.vo.Vacancy;
 import org.aggregator.job.util.HtmlTemplateUtil;
 
+import static java.util.Objects.isNull;
+
 public class HtmlView implements View {
     private static final Logger log = LoggerFactory.getLogger(HtmlView.class);
 
@@ -20,6 +22,7 @@ public class HtmlView implements View {
 
     @Override
     public void setController(Controller controller) {
+        if (isNull(controller)) { throw new IllegalArgumentException(); }
         this.controller = controller;
     }
 

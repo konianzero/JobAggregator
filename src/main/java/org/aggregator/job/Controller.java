@@ -2,11 +2,13 @@ package org.aggregator.job;
 
 import org.aggregator.job.model.Model;
 
+import static java.util.Objects.isNull;
+
 public class Controller {
     private Model model;
 
     public Controller(Model model) {
-        if (model == null) { throw new IllegalArgumentException(); }
+        if (isNull(model)) { throw new IllegalArgumentException(); }
         this.model = model;
     }
 
