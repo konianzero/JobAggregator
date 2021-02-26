@@ -29,7 +29,7 @@ public class HtmlView implements View {
     @Override
     public void update(List<Vacancy> vacancies) {
         updateFile(createHTML(vacancies));
-        log.info("Table of vacancies is generated");
+        log.info("Table of {} vacancies is generated", vacancies.size());
     }
 
     private void updateFile(String str) {
