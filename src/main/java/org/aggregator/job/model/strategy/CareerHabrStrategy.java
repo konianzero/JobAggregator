@@ -19,7 +19,7 @@ import org.aggregator.job.vo.Vacancy;
 public class CareerHabrStrategy implements Strategy {
 
     private static final String URL_FORMAT = "https://career.habr.com/vacancies?city_id=%s&page=%d&q=java&type=all";
-    private static final String SITE_NAME = "Habr Career";
+    private static final String SITE_NAME = "Хабр Карьера";
 
     @Override
     public List<Vacancy> getVacancies(String searchString) {
