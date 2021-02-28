@@ -17,7 +17,7 @@ import static java.util.Objects.isNull;
 public class HtmlView implements View {
     private static final Logger log = LoggerFactory.getLogger(HtmlView.class);
 
-    private final String filePath = "vacancies.html";
+    private final Path filePath = Path.of("vacancies.html");
     private Controller controller;
 
     @Override
@@ -29,25 +29,26 @@ public class HtmlView implements View {
     @Override
     public void update(List<Vacancy> vacancies) {
         updateFile(createHTML(vacancies));
-        log.info("Table of {} vacancies is generated", vacancies.size());
     }
 
     private void updateFile(String str) {
         try {
             createFileIfNotExists();
-            Files.writeString(Path.of(filePath), str);
+            Files.writeString(filePath, str);
+            log.info("File created {}", filePath.toAbsolutePath());
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
     }
 
     private void createFileIfNotExists() throws IOException {
-        if (Files.notExists(Path.of(filePath))) {
-            Files.createFile(Path.of(filePath));
+        if (Files.notExists(filePath)) {
+            Files.createFile(filePath);
         }
     }
 
     private String createHTML(List<Vacancy> vacancies) {
+        log.info("Generating table of {} vacancies", vacancies.size());
         return HtmlTemplateUtil.processHMTLTemplate("vacanciesTemplate", vacancies);
     }
 
