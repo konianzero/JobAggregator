@@ -12,6 +12,7 @@
         <java.version>15</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <codehaus.mojo.version>3.0.0</codehaus.mojo.version>
 
         <logback.version>1.2.3</logback.version>
         <slf4j.version>1.7.30</slf4j.version>
@@ -33,6 +34,14 @@
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>${codehaus.mojo.version}</version>
+                <configuration>
+                    <mainClass>org.aggregator.job.Aggregator</mainClass>
                 </configuration>
             </plugin>
         </plugins>

@@ -23,5 +23,6 @@ public class Aggregator {
         view.setController(controller);
 
         view.userCitySelectEmulationMethod();
+        System.exit(0);
     }
 }
