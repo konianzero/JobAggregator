@@ -2,19 +2,20 @@ package org.aggregator.job.model.strategy;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpRequest;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.aggregator.job.vo.Vacancy;
+
+import static org.aggregator.job.util.Util.*;
 
 public class CareerHabrStrategy implements Strategy {
 
@@ -28,7 +29,7 @@ public class CareerHabrStrategy implements Strategy {
         int pageNumber = 0;
         String cityId = getCityId(searchString);
         while (true) {
-            doc = getDocument(cityId, ++pageNumber);
+            doc = getDocument(String.format(URL_FORMAT, cityId, ++pageNumber));
             Elements vacancyElements = doc.getElementsByClass("vacancy-card");
             if (vacancyElements.size() == 0) { break; }
 
@@ -50,39 +51,27 @@ public class CareerHabrStrategy implements Strategy {
         return vacancies;
     }
 
-    private Document getDocument(String cityId, int page) {
-        Document doc = null;
-        try {
-            doc = Jsoup.connect(String.format(URL_FORMAT, cityId, page))
-                       .get();
-        } catch (IOException ioe) { ioe.printStackTrace(); }
-        return doc;
-    }
-
     private String getCityId(String searchString) {
-        String cityId = null;
-        try {
-            cityId = parseJsonResponse(
-                Jsoup.connect(String.format("https://career.habr.com/api/frontend/suggestions/locations?term=%s", searchString))
-                        .ignoreContentType(true).get()
-                        .body().text()
-            );
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return cityId;
+        return parseJsonResponse(getResponseString(makeRequest(searchString)));
     }
 
     private String parseJsonResponse(String text) {
         String res = null;
-        JSONParser jsonParser = new JSONParser();
         try {
-            JSONObject jsonObject = (JSONObject) jsonParser.parse(text);
-            JSONArray lang = (JSONArray) jsonObject.get("list");
-            res = ((JSONObject) lang.get(0)).get("value").toString();
-        } catch (ParseException e) {
-            e.printStackTrace();
+            JSONObject jsonObject = (JSONObject) JSON_PARSER.parse(text);
+            JSONArray list = (JSONArray) jsonObject.get("list");
+            res = ((JSONObject) list.get(0)).get("value").toString();
+        } catch (ParseException pe) {
+            pe.printStackTrace();
         }
         return res;
+    }
+
+    private HttpRequest makeRequest(String searchString) {
+        URI locationUri = URI.create(String.format("https://career.habr.com/api/frontend/suggestions/locations?term=%s", searchString));
+        return HttpRequest.newBuilder()
+                          .uri(locationUri)
+                          .GET()
+                          .build();
     }
 }

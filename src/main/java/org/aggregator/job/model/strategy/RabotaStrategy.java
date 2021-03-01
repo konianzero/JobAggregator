@@ -1,25 +1,20 @@
 package org.aggregator.job.model.strategy;
 
-import org.aggregator.job.vo.Vacancy;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.jsoup.Jsoup;
+
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.*;
-import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
+
+import org.aggregator.job.vo.Vacancy;
+
+import static org.aggregator.job.util.Util.*;
 
 public class RabotaStrategy implements Strategy {
 
@@ -36,7 +31,7 @@ public class RabotaStrategy implements Strategy {
         if (Objects.isNull(cityId)) { return List.of(); }
 
         while (hasVacancies) {
-            doc = getDocument(cityId, searchString, ++pageNumber);
+            doc = getDocument(String.format(URL_FORMAT, cityId, searchString, ++pageNumber));
             Elements vacancyElements = doc.getElementsByClass("infinity-scroll r-serp__infinity-list").first().children();
 
             for (Element element : vacancyElements) {
@@ -64,57 +59,17 @@ public class RabotaStrategy implements Strategy {
         return vacancies;
     }
 
-    private Document getDocument(String cityId, String searchString, int page) {
-        Document doc = null;
-        try {
-            doc = Jsoup.connect(String.format(URL_FORMAT, cityId, searchString, page))
-                       .get();
-        } catch (IOException ioe) { ioe.printStackTrace(); }
-        return doc;
-    }
-
     private String getCityId(String searchString) {
-        return parseJsonResponse(getResponseString(searchString), searchString);
-    }
-
-    private String getResponseString(String searchString) {
-        String data = String.format("""
-                {
-                  "request": {
-                    "filter": {
-                      "query": "%s"
-                    }
-                  }
-                }
-                """, searchString);
-
-        HttpRequest request = HttpRequest.newBuilder()
-                                         .uri(URI.create("https://api.rabota.ru/v4/regions/suggest.json"))
-                                         .header("Content-Type", "application/json")
-                                         .POST(HttpRequest.BodyPublishers.ofString(data))
-                                         .build();
-
-        HttpResponse<String> response = null;
-        HttpClient client = HttpClient.newHttpClient();
-        try {
-            response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (InterruptedException ie) {
-            ie.printStackTrace();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-
-        return Optional.ofNullable(response).map(HttpResponse::body).orElseThrow();
+        return parseJsonResponse(getResponseString(makeRequest(searchString)), searchString);
     }
 
     private String parseJsonResponse(String text, String searchString) {
         String res = null;
-        JSONParser jsonParser = new JSONParser();
         try {
-            JSONObject jsonObject = (JSONObject) jsonParser.parse(text);
+            JSONObject jsonObject = (JSONObject) JSON_PARSER.parse(text);
             JSONObject response = (JSONObject) jsonObject.get("response");
-            JSONArray lang = (JSONArray) response.get("regions");
-            for (Object o : lang) {
+            JSONArray regions = (JSONArray) response.get("regions");
+            for (Object o : regions) {
                 JSONObject region = (JSONObject) o;
                 if (region.get("name").toString().equals(searchString)) {
                     res = region.get("id").toString();
@@ -125,5 +80,22 @@ public class RabotaStrategy implements Strategy {
             pe.printStackTrace();
         }
         return res;
+    }
+
+    private HttpRequest makeRequest(String searchString) {
+        String data = String.format("""
+                {
+                  "request": {
+                    "filter": {
+                      "query": "%s"
+                    }
+                  }
+                }
+                """, searchString);
+        return HttpRequest.newBuilder()
+                          .uri(URI.create("https://api.rabota.ru/v4/regions/suggest.json"))
+                          .header("Content-Type", "application/json")
+                          .POST(HttpRequest.BodyPublishers.ofString(data))
+                          .build();
     }
 }

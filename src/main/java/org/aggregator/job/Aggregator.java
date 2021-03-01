@@ -7,7 +7,7 @@ import org.aggregator.job.model.strategy.RabotaStrategy;
 import org.aggregator.job.model.Provider;
 import org.aggregator.job.view.HtmlView;
 
-import static org.aggregator.job.util.ProxyUtil.getProxy;
+import static org.aggregator.job.util.Util.getProxy;
 
 public class Aggregator {
     public static void main(String[] args) {
