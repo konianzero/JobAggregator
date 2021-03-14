@@ -24,39 +24,57 @@ public class RabotaStrategy implements Strategy {
     @Override
     public List<Vacancy> getVacancies(String searchString) {
         List<Vacancy> vacancies = new ArrayList<>();
+
+        for (Element element : getElements(searchString)) {
+            if (!element.nodeName().equals("article")) {
+                continue;
+            }
+
+            vacancies.add(getVacancy(element));
+        }
+        return vacancies;
+    }
+
+    private List<Element> getElements(String searchString) {
+        List<Element> elements = new ArrayList<>();
         Document doc;
         int pageNumber = 0;
-        boolean hasVacancies = true;
         String cityId = getCityId(searchString);
-        if (Objects.isNull(cityId)) { return List.of(); }
 
-        while (hasVacancies) {
+        if (Objects.isNull(cityId)) { return elements; }
+
+        while (true) {
             doc = getDocument(String.format(URL_FORMAT, cityId, searchString, ++pageNumber));
             Elements vacancyElements = doc.getElementsByClass("infinity-scroll r-serp__infinity-list").first().children();
 
-            for (Element element : vacancyElements) {
-                if (element.attr("class").equals("r-serp-similar-title r-serp__item")) {
-                    hasVacancies = false;
-                    break;
+            if (vacancyElements.hasClass("r-serp-similar-title r-serp__item")) {
+                for (Element element : vacancyElements) {
+                    if (element.attr("class").equals("r-serp-similar-title r-serp__item")) {
+                        break;
+                    }
+                    elements.add(element);
                 }
-
-                if (!element.nodeName().equals("article")) {
-                    continue;
-                }
-
-                Vacancy vacancy = new Vacancy();
-                vacancy.setTitle(element.getElementsByClass("vacancy-preview-card__title").text());
-                String salary = element.getElementsByClass("vacancy-preview-card__salary").text();
-                vacancy.setSalary(salary == null ? "" : salary);
-                vacancy.setCity(element.getElementsByClass("vacancy-preview-location__address-text").text());
-                vacancy.setCompanyName(element.getElementsByClass("vacancy-preview-card__company-name").text());
-                vacancy.setSiteName(SITE_NAME);
-                vacancy.setUrl("https://spb.rabota.ru" + element.getElementsByClass("vacancy-preview-card__title").first().child(0).attr("href"));
-
-                vacancies.add(vacancy);
+                break;
+            } else {
+                elements.addAll(vacancyElements);
             }
         }
-        return vacancies;
+
+        return elements;
+    }
+
+    private Vacancy getVacancy(Element element) {
+        Vacancy vacancy = new Vacancy();
+
+        vacancy.setTitle(element.getElementsByClass("vacancy-preview-card__title").text());
+        String salary = element.getElementsByClass("vacancy-preview-card__salary").text();
+        vacancy.setSalary(salary == null ? "" : salary);
+        vacancy.setCity(element.getElementsByClass("vacancy-preview-location__address-text").text());
+        vacancy.setCompanyName(element.getElementsByClass("vacancy-preview-card__company-name").text());
+        vacancy.setSiteName(SITE_NAME);
+        vacancy.setUrl("https://spb.rabota.ru" + element.getElementsByClass("vacancy-preview-card__title").first().child(0).attr("href"));
+
+        return vacancy;
     }
 
     private String getCityId(String searchString) {

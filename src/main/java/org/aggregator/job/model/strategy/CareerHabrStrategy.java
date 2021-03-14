@@ -12,6 +12,7 @@ import java.net.URI;
 import java.net.http.HttpRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.aggregator.job.vo.Vacancy;
 
@@ -25,30 +26,48 @@ public class CareerHabrStrategy implements Strategy {
     @Override
     public List<Vacancy> getVacancies(String searchString) {
         List<Vacancy> vacancies = new ArrayList<>();
+
+        for (Element element : getElements(searchString)) {
+            if (element == null) { continue; }
+
+            vacancies.add(getVacancy(element));
+        }
+
+        return vacancies;
+    }
+
+    private List<Element> getElements(String searchString) {
+        List<Element> elements = new ArrayList<>();
         Document doc;
         int pageNumber = 0;
         String cityId = getCityId(searchString);
+
+        if (Objects.isNull(cityId)) { return elements; }
+
         while (true) {
             doc = getDocument(String.format(URL_FORMAT, cityId, ++pageNumber));
             Elements vacancyElements = doc.getElementsByClass("vacancy-card");
+
             if (vacancyElements.size() == 0) { break; }
 
-            for (Element element : vacancyElements) {
-                if (element == null) { continue; }
-
-                Vacancy vacancy = new Vacancy();
-                vacancy.setTitle(element.getElementsByClass("vacancy-card__title").text());
-                String salary = element.getElementsByClass("basic-salary").text();
-                vacancy.setSalary(salary == null ? "" : salary);
-                vacancy.setCity(element.getElementsByClass("vacancy-card__meta").first().child(0).text());
-                vacancy.setCompanyName(element.getElementsByClass("vacancy-card__company-title").text());
-                vacancy.setSiteName(SITE_NAME);
-                vacancy.setUrl("https://career.habr.com" + element.getElementsByClass("vacancy-card__title").first().child(0).attr("href"));
-
-                vacancies.add(vacancy);
-            }
+            elements.addAll(vacancyElements);
         }
-        return vacancies;
+
+        return elements;
+    }
+
+    private Vacancy getVacancy(Element element) {
+        Vacancy vacancy = new Vacancy();
+
+        vacancy.setTitle(element.getElementsByClass("vacancy-card__title").text());
+        String salary = element.getElementsByClass("basic-salary").text();
+        vacancy.setSalary(salary == null ? "" : salary);
+        vacancy.setCity(element.getElementsByClass("vacancy-card__meta").first().child(0).text());
+        vacancy.setCompanyName(element.getElementsByClass("vacancy-card__company-title").text());
+        vacancy.setSiteName(SITE_NAME);
+        vacancy.setUrl("https://career.habr.com" + element.getElementsByClass("vacancy-card__title").first().child(0).attr("href"));
+
+        return vacancy;
     }
 
     private String getCityId(String searchString) {
