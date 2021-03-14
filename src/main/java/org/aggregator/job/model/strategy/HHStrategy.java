@@ -18,9 +18,13 @@ public class HHStrategy implements Strategy {
 
     @Override
     public List<Vacancy> getVacancies(String searchString) {
+        return getVacancies(getElements(searchString));
+    }
+
+    private List<Vacancy> getVacancies(List<Element> elementList) {
         List<Vacancy> vacancies = new ArrayList<>();
 
-        for (Element element : getElements(searchString)) {
+        for (Element element : elementList) {
             if (element == null) { continue; }
 
             vacancies.add(getVacancy(element));
@@ -59,5 +63,4 @@ public class HHStrategy implements Strategy {
 
         return vacancy;
     }
-
 }

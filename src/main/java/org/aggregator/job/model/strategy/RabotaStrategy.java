@@ -23,15 +23,20 @@ public class RabotaStrategy implements Strategy {
 
     @Override
     public List<Vacancy> getVacancies(String searchString) {
+        return getVacancies(getElements(searchString));
+    }
+
+    private List<Vacancy> getVacancies(List<Element> elementList) {
         List<Vacancy> vacancies = new ArrayList<>();
 
-        for (Element element : getElements(searchString)) {
+        for (Element element : elementList) {
             if (!element.nodeName().equals("article")) {
                 continue;
             }
 
             vacancies.add(getVacancy(element));
         }
+
         return vacancies;
     }
 
