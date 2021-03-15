@@ -11,6 +11,8 @@ Aggregate java vacancies in Saint-Petersburg from websites:
 
 and generate file with HTML-table.
 
+![table](https://github.com/konianzero/JobAggregator/blob/master/table.png)
+
 ---
 
 **Launch**
