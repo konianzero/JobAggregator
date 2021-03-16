@@ -4,7 +4,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -13,6 +12,7 @@ import java.net.http.HttpRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.aggregator.job.vo.Vacancy;
 
@@ -42,19 +42,18 @@ public class CareerHabrStrategy implements Strategy {
 
     private List<Element> getElements(String searchString) {
         List<Element> elements = new ArrayList<>();
-        Document doc;
         int pageNumber = 0;
         String cityId = getCityId(searchString);
 
         if (Objects.isNull(cityId)) { return elements; }
 
         while (true) {
-            doc = getDocument(String.format(URL_FORMAT, cityId, ++pageNumber));
-            Elements vacancyElements = doc.getElementsByClass("vacancy-card");
+            Optional<Elements> vacancyElements = getDocument(String.format(URL_FORMAT, cityId, ++pageNumber))
+                    .map(doc -> doc.getElementsByClass("vacancy-card"));
 
-            if (vacancyElements.size() == 0) { break; }
+            if (vacancyElements.isEmpty() || vacancyElements.get().size() == 0) { break; }
 
-            elements.addAll(vacancyElements);
+            elements.addAll(vacancyElements.get());
         }
 
         return elements;

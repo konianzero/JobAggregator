@@ -3,6 +3,9 @@ package org.aggregator.job.benchmark;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
+import org.openjdk.jmh.runner.Runner;
+import org.openjdk.jmh.runner.RunnerException;
+import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.openjdk.jmh.annotations.*;
 
 import java.lang.reflect.Field;
@@ -10,10 +13,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.concurrent.Callable;
-
-import org.openjdk.jmh.runner.Runner;
-import org.openjdk.jmh.runner.RunnerException;
-import org.openjdk.jmh.runner.options.OptionsBuilder;
 
 import org.aggregator.job.model.strategy.HHStrategy;
 
@@ -64,7 +63,12 @@ public class HeadHunterBenchMark {
         getElements.setAccessible(true);
         getVacancies.setAccessible(true);
 
-        document = getDocument(String.format(urlFormat, searchString, pageNumber));
+        getDocument(String.format(urlFormat, searchString, pageNumber))
+                .ifPresentOrElse(
+                        (doc) -> document = doc,
+                        () -> System.err.println("Document not presented")
+                );
+
         try {
             elementList = (List<Element>) getElementsString.invoke(hhStrategy, searchString);
         } catch (IllegalAccessException | InvocationTargetException e) {

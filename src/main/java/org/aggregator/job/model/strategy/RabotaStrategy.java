@@ -4,7 +4,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -42,18 +41,19 @@ public class RabotaStrategy implements Strategy {
 
     private List<Element> getElements(String searchString) {
         List<Element> elements = new ArrayList<>();
-        Document doc;
         int pageNumber = 0;
         String cityId = getCityId(searchString);
 
         if (Objects.isNull(cityId)) { return elements; }
 
         while (true) {
-            doc = getDocument(String.format(URL_FORMAT, cityId, searchString, ++pageNumber));
-            Elements vacancyElements = doc.getElementsByClass("infinity-scroll r-serp__infinity-list").first().children();
+            Optional<Elements> vacancyElements = getDocument(String.format(URL_FORMAT, cityId, searchString, ++pageNumber))
+                    .map(doc -> doc.getElementsByClass("infinity-scroll r-serp__infinity-list").first().children());
 
-            if (vacancyElements.hasClass("r-serp-similar-title r-serp__item")) {
-                for (Element element : vacancyElements) {
+            if (vacancyElements.isEmpty()) {
+                break;
+            } else if (vacancyElements.get().hasClass("r-serp-similar-title r-serp__item")) {
+                for (Element element : vacancyElements.get()) {
                     if (element.attr("class").equals("r-serp-similar-title r-serp__item")) {
                         break;
                     }
@@ -61,7 +61,7 @@ public class RabotaStrategy implements Strategy {
                 }
                 break;
             } else {
-                elements.addAll(vacancyElements);
+                elements.addAll(vacancyElements.get());
             }
         }
 

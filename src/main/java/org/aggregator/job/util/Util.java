@@ -16,13 +16,15 @@ import org.aggregator.job.model.strategy.Strategy;
 public class Util {
     public static final JSONParser JSON_PARSER = new JSONParser();
 
-    public static Document getDocument(String str) {
-        Document doc = null;
+    public static Optional<Document> getDocument(String str) {
+        Document doc;
         try {
             doc = Jsoup.connect(str)
                     .get();
-        } catch (IOException ioe) { ioe.printStackTrace(); }
-        return doc;
+        } catch (IOException ioe) {
+            return Optional.empty();
+        }
+        return Optional.ofNullable(doc);
     }
 
     public static String getResponseString(HttpRequest request) {
@@ -30,10 +32,8 @@ public class Util {
         try {
             response = HttpClient.newHttpClient()
                     .send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (InterruptedException ie) {
-            ie.printStackTrace();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
+        } catch (InterruptedException | IOException e) {
+            System.err.println(e.getMessage());
         }
 
         return Optional.ofNullable(response).map(HttpResponse::body).orElseThrow();
