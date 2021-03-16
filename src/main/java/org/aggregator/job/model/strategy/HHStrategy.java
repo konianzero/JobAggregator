@@ -3,13 +3,12 @@ package org.aggregator.job.model.strategy;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.aggregator.job.vo.Vacancy;
 
@@ -37,7 +36,7 @@ public class HHStrategy implements Strategy {
     private void shutDownForkJoinPool() {
         customThreadPool.shutdown();
         try {
-            if (!customThreadPool.awaitTermination(5000, TimeUnit.MILLISECONDS)) {
+            if (!customThreadPool.awaitTermination(500, TimeUnit.MILLISECONDS)) {
                 customThreadPool.shutdownNow();
             }
         } catch (InterruptedException e) {
@@ -56,17 +55,16 @@ public class HHStrategy implements Strategy {
     }
 
     private List<Element> getElements(String searchString) {
-        List<Element> elements = new ArrayList<>();
-        int pageNumber = 0;
-
-        while (true) {
-            List<Element> vacancyElements = forkJoinSubmit(getElements(getDocument(String.format(URL_FORMAT, searchString, ++pageNumber))));
-
-            if (vacancyElements.isEmpty()) { break; }
-
-            elements.addAll(vacancyElements);
-        }
-        return elements;
+        return forkJoinSubmit(() ->
+                    Stream.iterate(0, i -> i + 1)
+                          .parallel()
+                          .map(pageNumber -> getDocument(String.format(URL_FORMAT, searchString, ++pageNumber)))
+                          .takeWhile(Objects::nonNull)
+                          .map(document -> forkJoinSubmit(getElements(document)))
+                          .map(elements -> elements.parallelStream())
+                          .reduce(Stream::concat).orElse(Stream.empty())
+                          .collect(Collectors.toList())
+        );
     }
 
     private Callable<List<Element>> getElements(Document document) {
@@ -80,13 +78,12 @@ public class HHStrategy implements Strategy {
     private Vacancy getVacancy(Element element) {
         Vacancy vacancy = new Vacancy();
 
-        vacancy.setTitle(element.getElementsByAttributeValueContaining("data-qa", "title").text());
-        String salary = element.getElementsByAttributeValueContaining("data-qa", "compensation").text();
-        vacancy.setSalary(salary == null ? "" : salary);
-        vacancy.setCity(element.getElementsByAttributeValueContaining("data-qa", "address").text());
-        vacancy.setCompanyName(element.getElementsByAttributeValue("data-qa", "vacancy-serp__vacancy-employer").text());
+        vacancy.setTitle(element.select("a[data-qa$=vacancy-title]").text());
+        vacancy.setSalary(Optional.ofNullable(element.select("span[data-qa$=vacancy-compensation]").text()).orElse(""));
+        vacancy.setCity(element.select("span[data-qa$=vacancy-address]").text());
+        vacancy.setCompanyName(element.select("a[data-qa$=vacancy-employer]").text());
         vacancy.setSiteName(SITE_NAME);
-        vacancy.setUrl(element.getElementsByAttributeValueContaining("data-qa", "title").attr("href"));
+        vacancy.setUrl(element.select("a[data-qa$=vacancy-title]").attr("href"));
 
         return vacancy;
     }
