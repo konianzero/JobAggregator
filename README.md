@@ -17,5 +17,5 @@ and generate file with HTML-table.
 
 **Launch**
 ```
-mvn clean compile exec:java
+gradle run
 ```
