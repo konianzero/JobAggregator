@@ -12,9 +12,15 @@ import java.net.http.HttpResponse;
 import java.util.Optional;
 
 import org.aggregator.job.model.strategy.Strategy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Util {
     public static final JSONParser JSON_PARSER = new JSONParser();
+    private static final Logger log = LoggerFactory.getLogger(Util.class);
+
+    private Util() {
+    }
 
     public static Optional<Document> getDocument(String str) {
         Document doc;
@@ -32,13 +38,17 @@ public class Util {
         try {
             response = HttpClient.newHttpClient()
                     .send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (InterruptedException | IOException e) {
-            System.err.println(e.getMessage());
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        } catch (InterruptedException e) {
+            log.error(e.getMessage());
+            Thread.currentThread().interrupt();
         }
 
         return Optional.ofNullable(response).map(HttpResponse::body).orElseThrow();
     }
 
+    @SuppressWarnings("unchecked")
     public static <T extends Strategy> T  getProxy(Strategy strategy) {
         ClassLoader classLoader = strategy.getClass().getClassLoader();
         Class<?>[] interfaces = strategy.getClass().getInterfaces();
