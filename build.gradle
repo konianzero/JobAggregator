@@ -26,7 +26,5 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.13.1'
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
     implementation 'org.thymeleaf:thymeleaf:3.0.2.RELEASE'
-    implementation 'org.openjdk.jmh:jmh-core:1.28'
-    implementation 'org.openjdk.jmh:jmh-generator-annprocess:1.28'
     compile 'ch.qos.logback:logback-classic:1.2.9'
 }
