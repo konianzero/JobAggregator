@@ -1,9 +1,15 @@
-
 plugins {
     id "application"
 }
 
-apply plugin : "java"
+group = 'org.aggregator.job'
+version = '1.0-SNAPSHOT'
+description = 'JobAggregator'
+
+sourceCompatibility = '15'
+targetCompatibility = '15'
+compileJava.options.encoding = "UTF-8"
+
 ext {
     javaMainClass = "org.aggregator.job.Aggregator"
 }
@@ -17,20 +23,10 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.slf4j:slf4j-api:1.7.30'
     implementation 'org.jsoup:jsoup:1.13.1'
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
     implementation 'org.thymeleaf:thymeleaf:3.0.2.RELEASE'
     implementation 'org.openjdk.jmh:jmh-core:1.28'
     implementation 'org.openjdk.jmh:jmh-generator-annprocess:1.28'
-    runtimeOnly 'ch.qos.logback:logback-classic:1.2.3'
-}
-
-group = 'org.aggregator.job'
-version = '1.0-SNAPSHOT'
-description = 'JobAggregator'
-java.sourceCompatibility = JavaVersion.VERSION_15
-
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
+    compile 'ch.qos.logback:logback-classic:1.2.9'
 }
