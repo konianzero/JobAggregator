@@ -5,7 +5,7 @@ import org.aggregator.job.model.Model;
 import static java.util.Objects.isNull;
 
 public class Controller {
-    private Model model;
+    private final Model model;
 
     public Controller(Model model) {
         if (isNull(model)) { throw new IllegalArgumentException(); }

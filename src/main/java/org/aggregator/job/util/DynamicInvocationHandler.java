@@ -12,16 +12,18 @@ import java.util.List;
 public class DynamicInvocationHandler implements InvocationHandler {
 
     private Strategy strategy;
+    private String strategyClassName;
 
     public DynamicInvocationHandler(Strategy strategy) {
         this.strategy = strategy;
+        this.strategyClassName = strategy.getClass().getSimpleName();
     }
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        log.info("Get vacancies from " + strategy.getClass().getSimpleName());
+        log.info("Get vacancies from " + strategyClassName);
         Object methodReturns = method.invoke(strategy, args);
-        log.info("{} vacancies", ((List<Vacancy>) methodReturns).size());
+        log.info("{} vacancies from {}", ((List<Vacancy>) methodReturns).size(), strategyClassName);
         return methodReturns;
     }
 }

@@ -1,29 +1,27 @@
 package org.aggregator.job.model;
 
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.aggregator.job.model.strategy.Strategy;
 import org.aggregator.job.vo.Vacancy;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.Callable;
 
-public class Provider {
-    private Strategy strategy;
-
-    public void setStrategy(Strategy strategy) {
-        isNull(strategy);
-        this.strategy = strategy;
-    }
+@Slf4j
+public class Provider implements Callable<List<Vacancy>> {
+    private final Strategy strategy;
+    @Setter
+    private String searchString;
 
     public Provider(Strategy strategy) {
-        isNull(strategy);
+        if (Objects.isNull(strategy)) { throw new IllegalArgumentException(); }
         this.strategy = strategy;
     }
 
-    public List<Vacancy> getJavaVacancies(String searchString) {
+    @Override
+    public List<Vacancy> call() throws Exception {
         return strategy.getVacancies(searchString);
-    }
-
-    private void isNull(Strategy strategy) {
-        if (Objects.isNull(strategy)) { throw new IllegalArgumentException(); }
     }
 }
