@@ -19,13 +19,14 @@ import org.aggregator.job.model.strategy.Strategy;
 @Slf4j
 public class Util {
     public static final JSONParser JSON_PARSER = new JSONParser();
+    private static final HttpClient httpClient = HttpClient.newHttpClient();
 
     public static Optional<Document> getDocument(String str) {
         Document doc;
         try {
-            doc = Jsoup.connect(str)
-                    .get();
+            doc = Jsoup.connect(str).get();
         } catch (IOException ioe) {
+            log.error("I/O Exception when Jsoup get document from " + str);
             return Optional.empty();
         }
         return Optional.ofNullable(doc);
@@ -34,10 +35,9 @@ public class Util {
     public static String getResponseString(HttpRequest request) {
         HttpResponse<String> response = null;
         try {
-            response = HttpClient.newHttpClient()
-                    .send(request, HttpResponse.BodyHandlers.ofString());
+            response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (IOException e) {
-            log.error(e.getMessage());
+            log.error("I/O Exception when send request to " + request.uri());
         } catch (InterruptedException e) {
             log.error(e.getMessage());
             Thread.currentThread().interrupt();

@@ -5,7 +5,7 @@ Initially, this is a task from JavaRush - [Java aggregator](https://javarush.ru/
 (_CodeGym_ - [Java aggregator](https://codegym.cc/quests/lectures/questcollections.level08.lecture15))
 
 Aggregate java vacancies in Saint-Petersburg from websites:
-   - [HeadHunter](http://hh.ru)
+   - [HeadHunter](http://hh.ru) (NOT WORKING YET!)
    - [Хабр Карьера](https://career.habr.com)
    - [Работа.ру](https://www.rabota.ru)
 

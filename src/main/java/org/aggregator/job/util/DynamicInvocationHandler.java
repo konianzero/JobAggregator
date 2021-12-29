@@ -19,7 +19,7 @@ public class DynamicInvocationHandler implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        log.info("Get vacancies from");
+        log.info("Get vacancies from " + strategy.getClass().getSimpleName());
         Object methodReturns = method.invoke(strategy, args);
         log.info("{} vacancies", ((List<Vacancy>) methodReturns).size());
         return methodReturns;
