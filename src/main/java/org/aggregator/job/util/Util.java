@@ -1,5 +1,7 @@
 package org.aggregator.job.util;
 
+import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.JSONParser;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -12,15 +14,11 @@ import java.net.http.HttpResponse;
 import java.util.Optional;
 
 import org.aggregator.job.model.strategy.Strategy;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+@UtilityClass
+@Slf4j
 public class Util {
     public static final JSONParser JSON_PARSER = new JSONParser();
-    private static final Logger log = LoggerFactory.getLogger(Util.class);
-
-    private Util() {
-    }
 
     public static Optional<Document> getDocument(String str) {
         Document doc;
