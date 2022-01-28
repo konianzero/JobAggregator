@@ -7,14 +7,12 @@ import org.aggregator.job.model.strategy.RabotaStrategy;
 import org.aggregator.job.model.Provider;
 import org.aggregator.job.view.HtmlView;
 
-import static org.aggregator.job.util.Util.getProxy;
-
 public class Aggregator {
     public static void main(String[] args) {
         Provider[] providers = {
-                new Provider(getProxy(new HHStrategy())),
-                new Provider(getProxy(new CareerHabrStrategy())),
-                new Provider(getProxy(new RabotaStrategy()))
+//                new Provider(new HHStrategy()),
+                new Provider(new CareerHabrStrategy()),
+                new Provider(new RabotaStrategy())
         };
         HtmlView view = new HtmlView();
         Model model = new Model(view, providers);

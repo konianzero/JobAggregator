@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Callable;
 
+import static org.aggregator.job.util.Util.getProxy;
+
 @Slf4j
 public class Provider implements Callable<List<Vacancy>> {
     private final Strategy strategy;
@@ -17,7 +19,7 @@ public class Provider implements Callable<List<Vacancy>> {
 
     public Provider(Strategy strategy) {
         if (Objects.isNull(strategy)) { throw new IllegalArgumentException(); }
-        this.strategy = strategy;
+        this.strategy = getProxy(strategy);
     }
 
     @Override
