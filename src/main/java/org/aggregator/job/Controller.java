@@ -1,18 +1,21 @@
 package org.aggregator.job;
 
 import org.aggregator.job.model.Model;
+import org.aggregator.job.view.View;
 
 import static java.util.Objects.isNull;
 
 public class Controller {
+    private final View view;
     private final Model model;
 
-    public Controller(Model model) {
-        if (isNull(model)) { throw new IllegalArgumentException(); }
+    public Controller(View view, Model model) {
+        if (isNull(view) || isNull(model)) { throw new IllegalArgumentException(); }
+        this.view = view;
         this.model = model;
     }
 
     public void onCitySelect(String cityName) {
-        model.selectCity(cityName);
+        view.update(model.selectCity(cityName));
     }
 }
