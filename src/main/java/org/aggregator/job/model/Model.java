@@ -16,12 +16,13 @@ import static java.util.Objects.isNull;
 @Slf4j
 public class Model {
     private final Provider[] providers;
-    private final ExecutorService executor = Executors.newFixedThreadPool(2);
+    private final ExecutorService executor;
 
     public Model(Provider... providers) {
         if (isNull(providers) || providers.length == 0) { throw new IllegalArgumentException(); }
 
         this.providers = providers;
+        executor = Executors.newFixedThreadPool(threadsNumber());
     }
 
     public List<Vacancy> setSearchParameter(String parameter) {
@@ -48,5 +49,12 @@ public class Model {
                 })
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
+    }
+
+    private int threadsNumber() {
+        int jvmAvailableProcessors = Runtime.getRuntime().availableProcessors();
+        int providersNum = providers.length;
+        log.info("Number of providers: {}, Number of available threads: {}", providersNum, jvmAvailableProcessors);
+        return providersNum > jvmAvailableProcessors ? jvmAvailableProcessors : providersNum;
     }
 }
