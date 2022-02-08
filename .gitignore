@@ -1,6 +1,7 @@
-.gradle
-.idea
-build
-target
+# gradle files
+.gradle/
+
+# IntelliJ IDEA files
+.idea/
+build/
 *.iml
-log
