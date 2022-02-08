@@ -4,7 +4,7 @@
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <charset>UTF-8</charset>
-            <pattern>%-61(%d{HH:mm:ss.SSS} %highlight(%-5.5level) [%10.10t] %cyan(%-15.15logger{0})) : %green(%msg%n)</pattern>
+            <pattern>%-61(%d{HH:mm:ss.SSS} %highlight(%-5.5level) [%10.10t] %cyan(%-15.15logger{0})) : %highlight(%msg%n)</pattern>
         </encoder>
     </appender>
 
