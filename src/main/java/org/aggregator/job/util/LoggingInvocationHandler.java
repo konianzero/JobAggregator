@@ -9,12 +9,12 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 @Slf4j(topic = "Strategies")
-public class DynamicInvocationHandler implements InvocationHandler {
+public class LoggingInvocationHandler implements InvocationHandler {
 
     private Strategy strategy;
     private String strategyClassName;
 
-    public DynamicInvocationHandler(Strategy strategy) {
+    public LoggingInvocationHandler(Strategy strategy) {
         this.strategy = strategy;
         this.strategyClassName = strategy.getClass().getSimpleName();
     }
