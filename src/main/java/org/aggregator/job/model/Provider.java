@@ -15,7 +15,7 @@ import static org.aggregator.job.util.Util.getProxy;
 public class Provider implements Callable<List<Vacancy>> {
     private final Strategy strategy;
     @Setter
-    private String searchString;
+    private String searchParameter;
 
     public Provider(Strategy strategy) {
         if (Objects.isNull(strategy)) { throw new IllegalArgumentException(); }
@@ -24,6 +24,6 @@ public class Provider implements Callable<List<Vacancy>> {
 
     @Override
     public List<Vacancy> call() throws Exception {
-        return strategy.getVacancies(searchString);
+        return strategy.getVacancies(searchParameter);
     }
 }

@@ -52,7 +52,7 @@ public class HtmlView implements View {
         return HtmlTemplateUtil.processHMTLTemplate("vacanciesTemplate", vacancies);
     }
 
-    public void userCitySelectEmulationMethod() {
-        controller.onCitySelect("Санкт-Петербург");
+    public void search() {
+        controller.onSearch("Санкт-Петербург");
     }
 }

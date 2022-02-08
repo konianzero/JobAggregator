@@ -15,7 +15,7 @@ public class Controller {
         this.model = model;
     }
 
-    public void onCitySelect(String cityName) {
-        view.update(model.selectCity(cityName));
+    public void onSearch(String searchParameter) {
+        view.update(model.setSearchParameter(searchParameter));
     }
 }

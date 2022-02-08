@@ -24,9 +24,9 @@ public class Model {
         this.providers = providers;
     }
 
-    public List<Vacancy> selectCity(String city) {
+    public List<Vacancy> setSearchParameter(String parameter) {
         for (Provider provider: providers) {
-            provider.setSearchString(city);
+            provider.setSearchParameter(parameter);
         }
 
         return getVacancies(providers);
