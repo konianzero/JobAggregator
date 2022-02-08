@@ -26,6 +26,12 @@ public class RabotaRuStrategy implements Strategy {
         return vacanciesFrom(processPage(searchString));
     }
 
+    private List<Vacancy> vacanciesFrom(List<Element> vacanciesElements) {
+        return vacanciesElements.stream()
+                .map(this::mapToVacancy)
+                .collect(Collectors.toList());
+    }
+
     private List<Element> processPage(String searchString) {
         return Stream.iterate(0, i -> i + 1)
                 .map(pageNumber -> getDocument(String.format(URL, searchString, pageNumber)))
@@ -40,12 +46,6 @@ public class RabotaRuStrategy implements Strategy {
 
     private Elements getVacanciesElements(Document document) {
         return document.select("div[class=infinity-scroll r-serp__infinity-list]").first().children();
-    }
-
-    private List<Vacancy> vacanciesFrom(List<Element> vacancyElements) {
-        return vacancyElements.stream()
-                .map(this::mapToVacancy)
-                .collect(Collectors.toList());
     }
 
     private Vacancy mapToVacancy(Element element) {

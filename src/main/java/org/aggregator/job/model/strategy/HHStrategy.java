@@ -8,12 +8,13 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.aggregator.job.to.Vacancy;
+import org.jsoup.select.Elements;
 
 import static org.aggregator.job.util.Util.getDocument;
 
 public class HHStrategy implements Strategy {
 
-    private static final String URL_FORMAT = "http://hh.ru/search/vacancy?text=java+developer+%s&page=%d";
+    private static final String URL = "https://hh.ru/search/vacancy?text=java+developer+%s&page=%d";
     private static final String SITE_NAME = "Head Hunter";
 
     @Override
@@ -21,15 +22,15 @@ public class HHStrategy implements Strategy {
         return vacanciesFrom(processPage(searchString));
     }
 
-    private List<Vacancy> vacanciesFrom(List<Element> vacancyElements) {
-        return vacancyElements.stream()
+    private List<Vacancy> vacanciesFrom(List<Element> vacanciesElements) {
+        return vacanciesElements.stream()
                           .map(this::mapToVacancy)
                           .collect(Collectors.toList());
     }
 
     private List<Element> processPage(String searchString) {
         return Stream.iterate(0, i -> i + 1)
-                     .map(pageNumber -> getDocument(String.format(URL_FORMAT, searchString, pageNumber)))
+                     .map(pageNumber -> getDocument(String.format(URL, searchString, pageNumber)))
                      .takeWhile(Optional::isPresent)
                      .map(Optional::get)
                      .map(this::getVacanciesElements)
@@ -37,19 +38,17 @@ public class HHStrategy implements Strategy {
                      .collect(Collectors.toList());
     }
 
-    private List<Element> getVacanciesElements(Document document) {
-        return document.select("div[data-qa^='vacancy-serp__vacancy ']")
-                       .stream()
-                       .filter(Objects::nonNull)
-                       .collect(Collectors.toList());
+    private Elements getVacanciesElements(Document document) {
+        return document.select("div[data-qa^='vacancy-serp__vacancy ']");
     }
 
     private Vacancy mapToVacancy(Element element) {
         Vacancy vacancy = new Vacancy();
 
         vacancy.setTitle(element.select("a[data-qa=vacancy-serp__vacancy-title]").text());
-        vacancy.setSalary(Optional.ofNullable(element.select("span[data-qa=vacancy-serp__vacancy-compensation]").text()).orElse(""));
-        vacancy.setCity(element.select("div[data-qa=vacancy-serp__vacancy-address]").text());
+        vacancy.setSalary(Optional.of(element.select("span[data-qa=vacancy-serp__vacancy-compensation]").text()).orElse(""));
+        Optional<String> workFromHome = Optional.of(element.select("div[data-qa=vacancy-serp__vacancy-work-schedule]").text());
+        vacancy.setCity(element.select("div[data-qa=vacancy-serp__vacancy-address]").text() + workFromHome.map(s -> ", " + s).orElse(""));
         vacancy.setCompanyName(element.select("a[data-qa=vacancy-serp__vacancy-employer]").text());
         vacancy.setSiteName(SITE_NAME);
         vacancy.setUrl(element.select("a[data-qa=vacancy-serp__vacancy-title]").attr("href"));
