@@ -1,5 +1,6 @@
 package org.aggregator.job.view;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,9 +15,8 @@ import org.aggregator.job.util.HtmlTemplateUtil;
 
 import static java.util.Objects.isNull;
 
+@Slf4j
 public class HtmlView implements View {
-    private static final Logger log = LoggerFactory.getLogger(HtmlView.class);
-
     private final Path filePath = Path.of("vacancies.html");
     private Controller controller;
 
