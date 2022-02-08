@@ -18,7 +18,7 @@ public class Provider implements Callable<List<Vacancy>> {
     private String searchParameter;
 
     public Provider(Strategy strategy) {
-        if (Objects.isNull(strategy)) { throw new IllegalArgumentException(); }
+        if (Objects.isNull(strategy)) { throw new IllegalArgumentException("Strategy is null!"); }
         this.strategy = getProxy(strategy);
     }
 

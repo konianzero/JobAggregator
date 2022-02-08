@@ -1,5 +1,6 @@
 package org.aggregator.job.util;
 
+import lombok.experimental.UtilityClass;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -10,6 +11,7 @@ import java.util.List;
 
 import org.aggregator.job.to.Vacancy;
 
+@UtilityClass
 public class HtmlTemplateUtil {
     public static String processHMTLTemplate(String templateName, List<Vacancy> vacancies) {
         TemplateEngine templateEngine = new TemplateEngine();

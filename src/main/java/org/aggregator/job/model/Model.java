@@ -19,7 +19,7 @@ public class Model {
     private final ExecutorService executor;
 
     public Model(Provider... providers) {
-        if (isNull(providers) || providers.length == 0) { throw new IllegalArgumentException(); }
+        if (isNull(providers) || providers.length == 0) { throw new IllegalArgumentException("No providers!"); }
 
         this.providers = providers;
         executor = Executors.newFixedThreadPool(threadsNumber());

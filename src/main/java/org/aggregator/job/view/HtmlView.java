@@ -22,7 +22,7 @@ public class HtmlView implements View {
 
     @Override
     public void setController(Controller controller) {
-        if (isNull(controller)) { throw new IllegalArgumentException(); }
+        if (isNull(controller)) { throw new IllegalArgumentException("Controller is null!"); }
         this.controller = controller;
     }
 

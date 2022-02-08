@@ -10,7 +10,8 @@ public class Controller {
     private final Model model;
 
     public Controller(View view, Model model) {
-        if (isNull(view) || isNull(model)) { throw new IllegalArgumentException(); }
+        if (isNull(view)) { throw new IllegalArgumentException("View is null!"); }
+        if (isNull(model)) { throw new IllegalArgumentException("Model is null!"); }
         this.view = view;
         this.model = model;
     }
