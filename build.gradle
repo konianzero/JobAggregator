@@ -6,8 +6,6 @@ group = 'org.aggregator.job'
 version = '1.0-SNAPSHOT'
 description = 'JobAggregator'
 
-sourceCompatibility = '15'
-targetCompatibility = '15'
 compileJava.options.encoding = "UTF-8"
 
 application {
