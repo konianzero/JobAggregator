@@ -1,7 +1,5 @@
 package org.aggregator.job.model.strategy;
 
-import lombok.extern.slf4j.Slf4j;
-
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -15,7 +13,6 @@ import org.aggregator.job.to.Vacancy;
 import static java.util.function.Predicate.not;
 import static org.aggregator.job.util.Util.*;
 
-@Slf4j
 public class RabotaRuStrategy implements Strategy {
 
     private static final String URL = "https://www.rabota.ru/vacancy/?query=java+developer+%s&page=%d";

@@ -25,7 +25,7 @@ public class Model {
         executor = Executors.newFixedThreadPool(threadsNumber());
     }
 
-    public List<Vacancy> setSearchParameter(String parameter) {
+    public List<Vacancy> getVacancies(String parameter) {
         for (Provider provider: providers) {
             provider.setSearchParameter(parameter);
         }
@@ -43,7 +43,7 @@ public class Model {
                         return future.get();
                     }
                     catch (InterruptedException | ExecutionException e) {
-                        log.warn("Interrupt in stream", e);
+                        log.warn("Exception in stream when retrieve vacancy list", e);
                         throw new RuntimeException(e);
                     }
                 })
