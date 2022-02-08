@@ -11,7 +11,14 @@ Aggregate java vacancies in Saint-Petersburg from websites:
 
 and generate file with HTML-table.
 
-![table](https://github.com/konianzero/JobAggregator/blob/master/table.png)
+![table](table.png)
+
+---
+
+### Requirements
+
+- JDK 15+
+- Gradle 7+
 
 ---
 
