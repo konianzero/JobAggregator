@@ -11,7 +11,7 @@ import java.net.*;
 import java.net.http.HttpRequest;
 import java.util.*;
 
-import org.aggregator.job.vo.Vacancy;
+import org.aggregator.job.to.Vacancy;
 
 import static org.aggregator.job.util.Util.*;
 

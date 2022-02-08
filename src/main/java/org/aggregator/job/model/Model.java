@@ -9,8 +9,7 @@ import java.util.stream.Collectors;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.aggregator.job.view.View;
-import org.aggregator.job.vo.Vacancy;
+import org.aggregator.job.to.Vacancy;
 
 import static java.util.Objects.isNull;
 

@@ -1,4 +1,4 @@
-package org.aggregator.job.vo;
+package org.aggregator.job.to;
 
 import java.util.Objects;
 

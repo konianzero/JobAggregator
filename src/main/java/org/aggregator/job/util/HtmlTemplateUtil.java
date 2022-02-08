@@ -8,7 +8,7 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import java.io.StringWriter;
 import java.util.List;
 
-import org.aggregator.job.vo.Vacancy;
+import org.aggregator.job.to.Vacancy;
 
 public class HtmlTemplateUtil {
     public static String processHMTLTemplate(String templateName, List<Vacancy> vacancies) {

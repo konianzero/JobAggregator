@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 import org.aggregator.job.Controller;
-import org.aggregator.job.vo.Vacancy;
+import org.aggregator.job.to.Vacancy;
 import org.aggregator.job.util.HtmlTemplateUtil;
 
 import static java.util.Objects.isNull;

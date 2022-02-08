@@ -7,7 +7,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.aggregator.job.vo.Vacancy;
+import org.aggregator.job.to.Vacancy;
 
 import static org.aggregator.job.util.Util.getDocument;
 

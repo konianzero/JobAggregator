@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.aggregator.job.vo.Vacancy;
+import org.aggregator.job.to.Vacancy;
 
 import static org.aggregator.job.util.Util.*;
 

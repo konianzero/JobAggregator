@@ -3,7 +3,7 @@ package org.aggregator.job.model;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.aggregator.job.model.strategy.Strategy;
-import org.aggregator.job.vo.Vacancy;
+import org.aggregator.job.to.Vacancy;
 
 import java.util.List;
 import java.util.Objects;
