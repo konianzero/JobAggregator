@@ -29,7 +29,7 @@ import static org.aggregator.job.util.Util.getDocument;
 public class CareerHabrStrategy implements Strategy {
 
     private static final String URL = "https://career.habr.com";
-    private static final String VACANCIES = URL + "/vacancies?city_id=%s&page=%d&q=java&type=all";
+    private static final String VACANCIES = URL + "/vacancies?city_id=%s&page=%d&q=%s&type=all";
     private static final String SITE_NAME = "Хабр Карьера";
 
     @Override
@@ -45,12 +45,13 @@ public class CareerHabrStrategy implements Strategy {
 
     private List<Element> processPage(String searchString) {
         List<Element> elements = new ArrayList<>();
-        String cityId = getCityId(searchString);
+        String[] searchStr = searchString.split("(?! [\\w]) ");
+        String cityId = getCityId(searchStr[1]);
 
         if (Objects.isNull(cityId)) { return elements; }
 
         return Stream.iterate(0, i -> i + 1)
-                .map(pageNumber -> getDocument(String.format(VACANCIES, cityId, pageNumber)))
+                .map(pageNumber -> getDocument(String.format(VACANCIES, cityId, pageNumber, searchStr[0])))
                 .takeWhile(Optional::isPresent)
                 .map(Optional::get)
                 .map(this::getVacanciesElements)

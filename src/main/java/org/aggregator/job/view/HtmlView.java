@@ -53,6 +53,6 @@ public class HtmlView implements View {
     }
 
     public void search() {
-        controller.onSearch("Санкт-Петербург");
+        controller.onSearch("Java developer", "Санкт-Петербург");
     }
 }

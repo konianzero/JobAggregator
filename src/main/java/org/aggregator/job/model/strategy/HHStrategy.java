@@ -15,7 +15,7 @@ import static org.aggregator.job.util.Util.getDocument;
 public class HHStrategy implements Strategy {
 
     private static final String URL = "https://hh.ru";
-    private static final String VACANCIES = URL + "/search/vacancy?text=java+developer+%s&page=%d";
+    private static final String VACANCIES = URL + "/search/vacancy?text=%s&page=%d";
     private static final String SITE_NAME = "Head Hunter";
 
     @Override

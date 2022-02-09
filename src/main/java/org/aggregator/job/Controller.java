@@ -16,7 +16,7 @@ public class Controller {
         this.model = model;
     }
 
-    public void onSearch(String searchParameter) {
-        view.update(model.getVacancies(searchParameter));
+    public void onSearch(String position, String location) {
+        view.update(model.getVacancies(position, location));
     }
 }

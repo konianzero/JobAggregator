@@ -16,7 +16,7 @@ import static org.aggregator.job.util.Util.*;
 public class RabotaRuStrategy implements Strategy {
 
     private static final String URL = "https://spb.rabota.ru";
-    private static final String VACANCIES = URL + "/vacancy/?query=java+developer+%s&page=%d";
+    private static final String VACANCIES = URL + "/vacancy/?query=%s&page=%d";
     private static final String SITE_NAME = "Работа.ру";
 
     @Override

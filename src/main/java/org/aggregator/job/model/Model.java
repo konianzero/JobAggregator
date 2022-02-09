@@ -25,9 +25,9 @@ public class Model {
         executor = Executors.newFixedThreadPool(threadsNumber());
     }
 
-    public List<Vacancy> getVacancies(String parameter) {
+    public List<Vacancy> getVacancies(String position, String location) {
         for (Provider provider: providers) {
-            provider.setSearchParameter(parameter);
+            provider.setSearchParameter(position + " " + location);
         }
 
         return getVacancies(providers);
