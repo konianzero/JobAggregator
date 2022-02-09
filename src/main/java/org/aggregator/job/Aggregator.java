@@ -1,16 +1,18 @@
 package org.aggregator.job;
 
 import org.aggregator.job.model.Model;
+import org.aggregator.job.model.Provider;
 import org.aggregator.job.model.strategy.CareerHabrStrategy;
 import org.aggregator.job.model.strategy.HHStrategy;
 import org.aggregator.job.model.strategy.RabotaRuStrategy;
-import org.aggregator.job.model.Provider;
+import org.aggregator.job.model.strategy.SuperJobStrategy;
 import org.aggregator.job.view.View;
 import org.aggregator.job.view.HtmlView;
 
 public class Aggregator {
     public static void main(String[] args) {
         Provider[] providers = {
+                new Provider(new SuperJobStrategy()),
                 new Provider(new HHStrategy()),
                 new Provider(new CareerHabrStrategy()),
                 new Provider(new RabotaRuStrategy())

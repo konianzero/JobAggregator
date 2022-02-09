@@ -7,7 +7,8 @@ Initially, this is a task from JavaRush - [Java aggregator](https://javarush.ru/
 Aggregate java vacancies in Saint-Petersburg from websites:
    - [HeadHunter](https://hh.ru/search/vacancy) - [HHStrategy](src/main/java/org/aggregator/job/model/strategy/HHStrategy.java)
    - [Хабр Карьера](https://career.habr.com/vacancies) - [CareerHabrStrategy](src/main/java/org/aggregator/job/model/strategy/CareerHabrStrategy.java)
-   - [Работа.ру](https://www.rabota.ru/vacancy/) - [RabotaRuStrategy](src/main/java/org/aggregator/job/model/strategy/RabotaRuStrategy.java)
+   - [Работа.ру](https://www.rabota.ru/vacancy) - [RabotaRuStrategy](src/main/java/org/aggregator/job/model/strategy/RabotaRuStrategy.java)
+   - [SuperJob](https://www.superjob.ru/vacancy) - [SuperJobStrategy](src/main/java/org/aggregator/job/model/strategy/SuperJobStrategy.java)
 
 and generate file with HTML-table ([HtmlTemplateUtil](src/main/java/org/aggregator/job/util/HtmlTemplateUtil.java), [vacanciesTemplate.html](src/main/resources/templates/vacanciesTemplate.html)).
 Information about vacancies processing is logged by a [LoggingInvocationHandler](src/main/java/org/aggregator/job/util/LoggingInvocationHandler.java)

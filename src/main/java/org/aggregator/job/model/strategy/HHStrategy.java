@@ -44,11 +44,11 @@ public class HHStrategy implements Strategy {
     }
 
     private Vacancy mapToVacancy(Element element) {
-        Optional<String> workFromHome = Optional.of(element.select("div[data-qa=vacancy-serp__vacancy-work-schedule]").text());
+        String workFromHome = element.select("div[data-qa=vacancy-serp__vacancy-work-schedule]").text();
         return Vacancy.builder()
                       .title(element.select("a[data-qa=vacancy-serp__vacancy-title]").text())
                       .salary(Optional.of(element.select("span[data-qa=vacancy-serp__vacancy-compensation]").text()).orElse(""))
-                      .location(element.select("div[data-qa=vacancy-serp__vacancy-address]").text() + workFromHome.map(s -> ", " + s).orElse(""))
+                      .location(element.select("div[data-qa=vacancy-serp__vacancy-address]").text() + (workFromHome.isEmpty() ? "" : ", " + workFromHome))
                       .companyName(element.select("a[data-qa=vacancy-serp__vacancy-employer]").text())
                       .siteName(SITE_NAME)
                       .link(element.select("a[data-qa=vacancy-serp__vacancy-title]").attr("href"))
