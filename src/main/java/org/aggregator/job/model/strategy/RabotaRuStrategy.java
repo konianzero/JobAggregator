@@ -15,7 +15,8 @@ import static org.aggregator.job.util.Util.*;
 
 public class RabotaRuStrategy implements Strategy {
 
-    private static final String URL = "https://www.rabota.ru/vacancy/?query=java+developer+%s&page=%d";
+    private static final String URL = "https://spb.rabota.ru";
+    private static final String VACANCIES = URL + "/vacancy/?query=java+developer+%s&page=%d";
     private static final String SITE_NAME = "Работа.ру";
 
     @Override
@@ -31,7 +32,7 @@ public class RabotaRuStrategy implements Strategy {
 
     private List<Element> processPage(String searchString) {
         return Stream.iterate(0, i -> i + 1)
-                .map(pageNumber -> getDocument(String.format(URL, searchString, pageNumber)))
+                .map(pageNumber -> getDocument(String.format(VACANCIES, searchString, pageNumber)))
                 .takeWhile(Optional::isPresent)
                 .map(Optional::get)
                 .map(this::getVacanciesElements)
@@ -46,15 +47,13 @@ public class RabotaRuStrategy implements Strategy {
     }
 
     private Vacancy mapToVacancy(Element element) {
-        Vacancy vacancy = new Vacancy();
-
-        vacancy.setTitle(element.getElementsByClass("vacancy-preview-card__title").text());
-        vacancy.setSalary(Optional.ofNullable(element.getElementsByClass("vacancy-preview-card__salary").text()).orElse(""));
-        vacancy.setCity(element.getElementsByClass("vacancy-preview-location__address-text").text());
-        vacancy.setCompanyName(element.getElementsByClass("vacancy-preview-card__company-name").text());
-        vacancy.setSiteName(SITE_NAME);
-        vacancy.setUrl("https://spb.rabota.ru" + element.getElementsByClass("vacancy-preview-card__title").first().child(0).attr("href"));
-
-        return vacancy;
+        return Vacancy.builder()
+                      .title(element.getElementsByClass("vacancy-preview-card__title").text())
+                      .salary(Optional.of(element.getElementsByClass("vacancy-preview-card__salary").text()).orElse(""))
+                      .location(element.getElementsByClass("vacancy-preview-location__address-text").text())
+                      .companyName(element.getElementsByClass("vacancy-preview-card__company-name").text())
+                      .siteName(SITE_NAME)
+                      .link(URL + element.getElementsByClass("vacancy-preview-card__title").first().child(0).attr("href"))
+                      .build();
     }
 }

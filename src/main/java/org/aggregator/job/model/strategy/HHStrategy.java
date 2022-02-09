@@ -14,7 +14,8 @@ import static org.aggregator.job.util.Util.getDocument;
 
 public class HHStrategy implements Strategy {
 
-    private static final String URL = "https://hh.ru/search/vacancy?text=java+developer+%s&page=%d";
+    private static final String URL = "https://hh.ru";
+    private static final String VACANCIES = URL + "/search/vacancy?text=java+developer+%s&page=%d";
     private static final String SITE_NAME = "Head Hunter";
 
     @Override
@@ -30,7 +31,7 @@ public class HHStrategy implements Strategy {
 
     private List<Element> processPage(String searchString) {
         return Stream.iterate(0, i -> i + 1)
-                     .map(pageNumber -> getDocument(String.format(URL, searchString, pageNumber)))
+                     .map(pageNumber -> getDocument(String.format(VACANCIES, searchString, pageNumber)))
                      .takeWhile(Optional::isPresent)
                      .map(Optional::get)
                      .map(this::getVacanciesElements)
@@ -43,16 +44,14 @@ public class HHStrategy implements Strategy {
     }
 
     private Vacancy mapToVacancy(Element element) {
-        Vacancy vacancy = new Vacancy();
-
-        vacancy.setTitle(element.select("a[data-qa=vacancy-serp__vacancy-title]").text());
-        vacancy.setSalary(Optional.of(element.select("span[data-qa=vacancy-serp__vacancy-compensation]").text()).orElse(""));
         Optional<String> workFromHome = Optional.of(element.select("div[data-qa=vacancy-serp__vacancy-work-schedule]").text());
-        vacancy.setCity(element.select("div[data-qa=vacancy-serp__vacancy-address]").text() + workFromHome.map(s -> ", " + s).orElse(""));
-        vacancy.setCompanyName(element.select("a[data-qa=vacancy-serp__vacancy-employer]").text());
-        vacancy.setSiteName(SITE_NAME);
-        vacancy.setUrl(element.select("a[data-qa=vacancy-serp__vacancy-title]").attr("href"));
-
-        return vacancy;
+        return Vacancy.builder()
+                      .title(element.select("a[data-qa=vacancy-serp__vacancy-title]").text())
+                      .salary(Optional.of(element.select("span[data-qa=vacancy-serp__vacancy-compensation]").text()).orElse(""))
+                      .location(element.select("div[data-qa=vacancy-serp__vacancy-address]").text() + workFromHome.map(s -> ", " + s).orElse(""))
+                      .companyName(element.select("a[data-qa=vacancy-serp__vacancy-employer]").text())
+                      .siteName(SITE_NAME)
+                      .link(element.select("a[data-qa=vacancy-serp__vacancy-title]").attr("href"))
+                      .build();
     }
 }

@@ -28,7 +28,8 @@ import static org.aggregator.job.util.Util.getDocument;
 @Slf4j
 public class CareerHabrStrategy implements Strategy {
 
-    private static final String URL = "https://career.habr.com/vacancies?city_id=%s&page=%d&q=java&type=all";
+    private static final String URL = "https://career.habr.com";
+    private static final String VACANCIES = URL + "/vacancies?city_id=%s&page=%d&q=java&type=all";
     private static final String SITE_NAME = "Хабр Карьера";
 
     @Override
@@ -49,7 +50,7 @@ public class CareerHabrStrategy implements Strategy {
         if (Objects.isNull(cityId)) { return elements; }
 
         return Stream.iterate(0, i -> i + 1)
-                .map(pageNumber -> getDocument(String.format(URL, cityId, pageNumber)))
+                .map(pageNumber -> getDocument(String.format(VACANCIES, cityId, pageNumber)))
                 .takeWhile(Optional::isPresent)
                 .map(Optional::get)
                 .map(this::getVacanciesElements)
@@ -63,23 +64,20 @@ public class CareerHabrStrategy implements Strategy {
     }
 
     private Vacancy mapToVacancy(Element element) {
-        Vacancy vacancy = new Vacancy();
-
-        vacancy.setTitle(element.getElementsByClass("vacancy-card__title").text());
-        String salary = element.getElementsByClass("basic-salary").text();
-        vacancy.setSalary(salary == null ? "" : salary);
-        vacancy.setCity(element.getElementsByClass("vacancy-card__meta").text().replace(" · ", ", "));
-        vacancy.setCompanyName(element.getElementsByClass("vacancy-card__company-title").text());
-        vacancy.setSiteName(SITE_NAME);
-        vacancy.setUrl("https://career.habr.com" + element.getElementsByClass("vacancy-card__title").first().child(0).attr("href"));
-
-        return vacancy;
+        return Vacancy.builder()
+                      .title(element.getElementsByClass("vacancy-card__title").text())
+                      .salary(Optional.of(element.getElementsByClass("basic-salary").text()).orElse(""))
+                      .location(element.getElementsByClass("vacancy-card__meta").text().replace(" · ", ", "))
+                      .companyName(element.getElementsByClass("vacancy-card__company-title").text())
+                      .siteName(SITE_NAME)
+                      .link(URL + element.getElementsByClass("vacancy-card__title").first().child(0).attr("href"))
+                      .build();
     }
 
 
-    /* *************************************
-     * *** Helper methods to get city ID ***
-     * *************************************/
+    /* ************************************* *
+     * *** Helper methods to get city ID *** *
+     * ************************************* */
 
     public static final JSONParser JSON_PARSER = new JSONParser();
     private static final HttpClient httpClient = HttpClient.newHttpClient();
@@ -95,7 +93,7 @@ public class CareerHabrStrategy implements Strategy {
             JSONArray list = (JSONArray) jsonObject.get("list");
             res = ((JSONObject) list.get(0)).get("value").toString();
         } catch (ParseException pe) {
-            pe.printStackTrace();
+            log.error("Exception when parse JSON\n:  " + text, pe);
         }
         return res;
     }
@@ -104,14 +102,14 @@ public class CareerHabrStrategy implements Strategy {
         HttpResponse<String> response = null;
         try {
             response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException e) {
-            log.error("I/O Exception when send request to " + request.uri());
-        } catch (InterruptedException e) {
-            log.error(e.getMessage());
+        } catch (IOException ioe) {
+            log.error("I/O Exception when send request to " + request.uri(), ioe);
+        } catch (InterruptedException ie) {
+            log.error("Interrupt when send request to " + request.uri(), ie);
             Thread.currentThread().interrupt();
         }
 
-        return Optional.ofNullable(response).map(HttpResponse::body).orElseThrow();
+        return Optional.ofNullable(response).map(HttpResponse::body).orElse("");
     }
 
     private HttpRequest makeRequest(String searchString) {
