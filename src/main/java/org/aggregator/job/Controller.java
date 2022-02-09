@@ -1,17 +1,15 @@
 package org.aggregator.job;
 
+import lombok.NonNull;
+
 import org.aggregator.job.model.Model;
 import org.aggregator.job.view.View;
-
-import static java.util.Objects.isNull;
 
 public class Controller {
     private final View view;
     private final Model model;
 
-    public Controller(View view, Model model) {
-        if (isNull(view)) { throw new IllegalArgumentException("View is null!"); }
-        if (isNull(model)) { throw new IllegalArgumentException("Model is null!"); }
+    public Controller(@NonNull View view, @NonNull Model model) {
         this.view = view;
         this.model = model;
     }

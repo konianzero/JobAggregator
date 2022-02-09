@@ -7,19 +7,19 @@ import java.util.List;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
+import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.aggregator.job.to.Vacancy;
 
-import static java.util.Objects.isNull;
+import org.aggregator.job.to.Vacancy;
 
 @Slf4j
 public class Model {
     private final Provider[] providers;
     private final ExecutorService executor;
 
-    public Model(Provider... providers) {
-        if (isNull(providers) || providers.length == 0) { throw new IllegalArgumentException("No providers!"); }
+    public Model(@NonNull Provider... providers) {
+        if (providers.length == 0) { throw new IllegalArgumentException("Providers is empty!"); }
 
         this.providers = providers;
         executor = Executors.newFixedThreadPool(threadsNumber());
