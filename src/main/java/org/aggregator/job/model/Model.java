@@ -1,11 +1,7 @@
 package org.aggregator.job.model;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.*;
-import java.util.stream.Collectors;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -16,13 +12,15 @@ import org.aggregator.job.to.Vacancy;
 @Slf4j
 public class Model {
     private final Provider[] providers;
-    private final ExecutorService executor;
+    private final ExecutorService executorService;
+    private final CompletionService<List<Vacancy>> completionService;
 
     public Model(@NonNull Provider... providers) {
         if (providers.length == 0) { throw new IllegalArgumentException("Providers is empty!"); }
 
         this.providers = providers;
-        executor = Executors.newFixedThreadPool(threadsNumber());
+        executorService = Executors.newFixedThreadPool(threadsNumber());
+        completionService = new ExecutorCompletionService<>(executorService);
     }
 
     public List<Vacancy> getVacancies(String position, String location) {
@@ -35,20 +33,31 @@ public class Model {
 
     @SneakyThrows
     private List<Vacancy> getVacancies(Provider[] providers) {
-        List<Callable<List<Vacancy>>> callableTasks = new ArrayList<>(Arrays.asList(providers));
-        List<Future<List<Vacancy>>> futures = executor.invokeAll(callableTasks);
-        return futures.stream()
-                .map(future -> {
-                    try {
-                        return future.get();
-                    }
-                    catch (InterruptedException | ExecutionException e) {
-                        log.warn("Exception in stream when retrieve vacancy list", e);
-                        throw new RuntimeException(e);
-                    }
-                })
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
+        List<Vacancy> allVacancies = new ArrayList<>();
+
+        // Submit tasks
+        for (Provider provider : providers) {
+            completionService.submit(provider);
+        }
+
+        // Get results
+        for (int i = 0; i < providers.length; i++) {
+            Future<List<Vacancy>> future = completionService.take();
+            List<Vacancy> vacancies = null;
+
+            try {
+                vacancies = future.get();
+            } catch (InterruptedException e) {
+                log.error("Interrupted while get result from task", e);
+                Thread.currentThread().interrupt();
+            } catch (ExecutionException e) {
+                log.error("Exception while execute task", e);
+            }
+
+            if (Objects.nonNull(vacancies)) allVacancies.addAll(vacancies);
+        }
+
+        return allVacancies;
     }
 
     private int threadsNumber() {
