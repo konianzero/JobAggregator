@@ -1,0 +1,2 @@
+### getVacancies
+GET http://localhost:9080/api/vacancies?position=java+developer&location=Санкт-Петербург
