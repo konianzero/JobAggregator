@@ -1,3 +1,13 @@
+// https://openliberty.io/blog/2020/09/03/open-liberty-tools-intellij.html
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'io.openliberty.tools:liberty-gradle-plugin:3.3'
+    }
+}
+
 apply plugin: 'war'
 apply plugin: 'liberty'
 
@@ -11,16 +21,6 @@ sourceCompatibility = '17'
 targetCompatibility = '17'
 compileJava.options.encoding = "UTF-8"
 compileTestJava.options.encoding = "UTF-8"
-
-// https://openliberty.io/blog/2020/09/03/open-liberty-tools-intellij.html
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'io.openliberty.tools:liberty-gradle-plugin:3.3'
-    }
-}
 
 repositories {
     mavenCentral()

@@ -1,13 +1,13 @@
 Job Aggregator Front-End
 -----------------------
 
-Generates vacancies table [WIP].
+Show response from back-service.
 
 ---
 
 ### Requirements
 
-- JDK 17
+- JDK 11
 
 ---
 
