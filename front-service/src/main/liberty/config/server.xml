@@ -4,6 +4,8 @@
     <featureManager>
     <!-- https://www.ibm.com/docs/en/was-liberty/base?topic=management-liberty-features -->
         <feature>cdi-2.0</feature>
+<!--        <feature>jndi-1.0</feature>-->
+        <feature>beanValidation-2.0</feature>
         <feature>mpOpenAPI-2.0</feature>
         <feature>mpRestClient-2.0</feature>
     </featureManager>

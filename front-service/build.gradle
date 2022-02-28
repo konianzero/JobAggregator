@@ -27,13 +27,23 @@ repositories {
 }
 
 dependencies {
-
-    providedCompile 'jakarta.platform:jakarta.jakartaee-web-api:8.0.0'
-    providedCompile 'org.eclipse.microprofile:microprofile:4.1'
-
     implementation 'ch.qos.logback:logback-classic:1.2.10'
     compileOnly 'org.projectlombok:lombok:1.18.22'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
+
+    // MicroProfile
+    providedCompile 'jakarta.platform:jakarta.jakartaee-web-api:8.0.0'
+    providedCompile 'org.eclipse.microprofile:microprofile:4.1'
+
+    // MVC
+    implementation 'javax.mvc:javax.mvc-api:1.0.0'
+    implementation 'org.eclipse.krazo:krazo-cxf:1.0.0'
+    implementation 'org.eclipse.krazo:krazo-core:1.0.0'
+
+    // Thymeleaf
+    implementation 'org.thymeleaf:thymeleaf:3.0.15.RELEASE'
+    implementation 'io.vavr:vavr:0.10.4'
+    implementation 'org.eclipse.krazo.ext:krazo-thymeleaf:1.1.1'
 
     // Test
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'

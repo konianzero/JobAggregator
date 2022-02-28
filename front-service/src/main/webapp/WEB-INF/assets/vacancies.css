@@ -1,0 +1,25 @@
+table {
+    border: solid 1px #DDEEEE;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font: normal 13px Arial, sans-serif;
+}
+table thead th {
+    background-color: #9BCCCC;
+    border: solid 1px #DDEEEE;
+    color: #336B6B;
+    padding: 10px;
+    font-size: 15px;
+    text-align: left;
+}
+table tbody td {
+    border: solid 1px #DDEEEE;
+    color: #333;
+    padding: 10px;
+}
+table tbody tr:nth-child(2n) {
+    background: #F4F4F4;
+}
+table tbody tr:hover {
+    background: #DDEEEE;
+}
