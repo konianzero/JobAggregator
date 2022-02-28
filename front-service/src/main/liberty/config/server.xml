@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server description="${project.name}">
+
+    <featureManager>
+    <!-- https://www.ibm.com/docs/en/was-liberty/base?topic=management-liberty-features -->
+        <feature>cdi-2.0</feature>
+        <feature>mpOpenAPI-2.0</feature>
+        <feature>mpRestClient-2.0</feature>
+    </featureManager>
+
+    <httpEndpoint id="defaultHttpEndpoint"
+                  httpPort="${default.http.port}"
+                  httpsPort="${default.http.port}"/>
+
+    <webApplication location="${project.name}.war"
+                    contextRoot="${app.context.root}"/>
+</server>

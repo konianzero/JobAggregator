@@ -1,0 +1,57 @@
+// https://openliberty.io/blog/2020/09/03/open-liberty-tools-intellij.html
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'io.openliberty.tools:liberty-gradle-plugin:3.3'
+    }
+}
+
+apply plugin: 'war'
+apply plugin: 'liberty'
+
+def projectName = 'back'
+
+group = 'com.jobaggregator.back'
+version = '0.1-SNAPSHOT'
+description = 'job aggregation back-end'
+
+sourceCompatibility = '17'
+targetCompatibility = '17'
+compileJava.options.encoding = "UTF-8"
+compileTestJava.options.encoding = "UTF-8"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'ch.qos.logback:logback-classic:1.2.10'
+    implementation 'org.jsoup:jsoup:1.14.3'
+    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+
+    providedCompile 'jakarta.platform:jakarta.jakartaee-web-api:9.1.0'
+    providedCompile 'org.eclipse.microprofile:microprofile:5.0'
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+    testCompileOnly 'org.projectlombok:lombok:1.18.22'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
+}
+
+war {
+    archiveFileName = projectName + '.war'
+}
+
+ext {
+    liberty.server.var.'default.http.port' = '9080'
+    liberty.server.var.'default.https.port' = '9443'
+    liberty.server.var.'project.name' = projectName
+    liberty.server.var.'app.context.root' = '/'
+}
+
+test {
+    useJUnitPlatform()
+}
