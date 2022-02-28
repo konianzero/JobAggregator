@@ -13,5 +13,5 @@ Have a look in the README file in each directory ([back readme](back-service/REA
 
 Once both projects are built and started, open your browser at the following URL to launch the page:
 ```
-http://localhost:9081/index.html
+GET http://localhost:9081/view/vacancies?position=java+developer&location=Санкт-Петербург
 ```
