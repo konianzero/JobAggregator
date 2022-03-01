@@ -1,38 +1,26 @@
 package org.aggregator.job.util.mapper;
 
 import jakarta.json.*;
+import jakarta.json.bind.Jsonb;
+import jakarta.json.bind.JsonbBuilder;
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 import org.aggregator.job.to.Vacancy;
 
 import java.util.List;
 
 @UtilityClass
+@Slf4j
 public class VacancyMapper {
-    public static JsonArray map(List<Vacancy> vacancies) {
-        final JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
-        vacancies.forEach(vacancy -> {
-            JsonObject jsonObject = map(vacancy);
-            arrayBuilder.add(jsonObject);
-        });
-        return arrayBuilder.build();
-    }
 
-    public static JsonObject map(Vacancy vacancy) {
-        JsonObjectBuilder builder = Json.createObjectBuilder();
-        addValue(builder, "title", vacancy.getTitle());
-        addValue(builder, "salary", vacancy.getSalary());
-        addValue(builder, "location", vacancy.getLocation());
-        addValue(builder, "companyName", vacancy.getCompanyName());
-        addValue(builder, "siteName", vacancy.getSiteName());
-        addValue(builder, "link", vacancy.getLink());
-        return builder.build();
-    }
-
-    private static void addValue(JsonObjectBuilder builder, String key, Object value) {
-        if (value != null) {
-            builder.add(key, value.toString());
-        } else {
-            builder.addNull(key);
+    public static String map(List<Vacancy> vacancies) {
+        String jsonArray = null;
+        log.info("Map vacancies list to JSON");
+        try (Jsonb jsonb = JsonbBuilder.create()) {
+            jsonArray = jsonb.toJson(vacancies);
+        } catch (Exception e) {
+            log.error("Exception while mapping Vacancies to Json Array", e);
         }
+        return jsonArray;
     }
 }
