@@ -36,7 +36,7 @@ public class VacancyController {
     //@View("vacancies.html")
     @Produces(MediaType.TEXT_HTML)
     public String getVacancies(@QueryParam("position") String position, @QueryParam("location") String location) {
-        // TODO - Not working with backService !
+        // TODO - Interceptor for {http://web.job.aggregator.org/}VacancyController has thrown exception, unwinding now javax.ws.rs.core.Configuration context class has not been injected. Check if ContextProvider supporting this class is registered
         //models.put("vacancies", backService.onSearch(position, location));
         //List<Vacancy> vacancies = backService.onSearch(position, location);
         List<Vacancy> vacancies = getList();
