@@ -15,11 +15,11 @@ public class VacancyMapper {
 
     public static String map(List<Vacancy> vacancies) {
         String jsonArray = null;
-        log.info("Map Response to JSON");
+        log.info("Map vacancies list to JSON");
         try (Jsonb jsonb = JsonbBuilder.create()) {
             jsonArray = jsonb.toJson(vacancies);
         } catch (Exception e) {
-            log.error("Exception while binding Vacancy Json Array", e);
+            log.error("Exception while mapping Vacancies to Json Array", e);
         }
         return jsonArray;
     }
