@@ -1,3 +1,5 @@
+import org.gradle.api.tasks.wrapper.Wrapper
+
 // https://openliberty.io/blog/2020/09/03/open-liberty-tools-intellij.html
 buildscript {
     repositories {
@@ -64,4 +66,9 @@ ext {
 
 test {
     useJUnitPlatform()
+}
+
+wrapper {
+    gradleVersion = '6.8.3'
+    distributionType = Wrapper.DistributionType.BIN
 }

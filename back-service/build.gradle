@@ -55,3 +55,8 @@ ext {
 test {
     useJUnitPlatform()
 }
+
+wrapper {
+    gradleVersion = '6.9.2'
+    distributionType = Wrapper.DistributionType.BIN
+}
