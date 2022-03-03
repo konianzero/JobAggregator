@@ -14,7 +14,6 @@ import java.io.InputStream;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 import static java.lang.String.format;
 
-// TODO - [WARNING ] SRVE0190E: Файл не найден: /assets/vacancies.css
 @Path("")
 @RequestScoped
 @Slf4j
@@ -32,7 +31,9 @@ public class StaticResources {
      * /WEB-INF/assets
      */
     @GET
-    @Path("{path: ^(assets|public|static|resources).*}")
+    //@Path("{path: ^(assets|public|static|resources)\\/.*}")
+    //@Path("{path: ^assets\\/.*}")
+    @Path("{path:.*}")
     public Response staticResources(@PathParam("path") final String path) {
         log.debug("Handling static resources: {}", path);
         InputStream resource = context.getResourceAsStream(format("/WEB-INF/%s", path));
