@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Provider
@@ -31,8 +32,10 @@ public class ListMessageBodyWriter implements MessageBodyWriter<List<Vacancy>> {
 
     @Override
     public void writeTo(List<Vacancy> vacancies, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException, WebApplicationException {
-        DataOutputStream dos = new DataOutputStream(entityStream);
-        String jsonArray = VacancyMapper.map(vacancies);
-        dos.writeUTF(jsonArray);
+        try (DataOutputStream dos = new DataOutputStream(entityStream)) {
+            String jsonArray = VacancyMapper.map(vacancies);
+            dos.write(jsonArray.getBytes(StandardCharsets.UTF_8));
+            dos.flush();
+        }
     }
 }
