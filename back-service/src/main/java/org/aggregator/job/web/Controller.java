@@ -1,11 +1,10 @@
-package org.aggregator.job;
+package org.aggregator.job.web;
 
 import java.util.List;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import lombok.NonNull;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aggregator.job.model.Model;
