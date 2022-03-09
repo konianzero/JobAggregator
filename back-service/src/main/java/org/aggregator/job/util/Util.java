@@ -7,10 +7,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
-import java.lang.reflect.Proxy;
 import java.util.Optional;
-
-import org.aggregator.job.model.strategy.Strategy;
 
 @UtilityClass
 @Slf4j
@@ -25,12 +22,5 @@ public class Util {
             return Optional.empty();
         }
         return Optional.ofNullable(doc);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T extends Strategy> T  getProxy(Strategy strategy) {
-        ClassLoader classLoader = strategy.getClass().getClassLoader();
-        Class<?>[] interfaces = strategy.getClass().getInterfaces();
-        return (T) Proxy.newProxyInstance(classLoader, interfaces, new LoggingInvocationHandler(strategy));
     }
 }
