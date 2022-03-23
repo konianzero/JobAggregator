@@ -30,7 +30,7 @@ public class RabotaRuStrategy implements Strategy {
     private List<Vacancy> vacanciesFrom(List<Element> vacanciesElements) {
         return vacanciesElements.stream()
                 .map(this::mapToVacancy)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private List<Element> processPage(String searchString) {
@@ -42,7 +42,7 @@ public class RabotaRuStrategy implements Strategy {
                 .flatMap(Collection::stream)
                 .takeWhile(not(e -> e.nodeName().equals("div") && e.className().equals("r-serp-similar-title r-serp__item") && e.child(0).text().equals("Похожие вакансии")))
                 .filter(e -> e.nodeName().equals("article"))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private Elements getVacanciesElements(Document document) {

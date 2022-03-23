@@ -31,7 +31,7 @@ public class SuperJobStrategy implements Strategy {
     private List<Vacancy> vacanciesFrom(List<Element> vacanciesElements) {
         return vacanciesElements.stream()
                 .map(this::mapToVacancy)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private List<Element> processPage(String searchString) {
@@ -42,7 +42,7 @@ public class SuperJobStrategy implements Strategy {
                 .map(this::getVacanciesElements)
                 .takeWhile(not(ArrayList::isEmpty))
                 .flatMap(Collection::stream)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private Elements getVacanciesElements(Document document) {
