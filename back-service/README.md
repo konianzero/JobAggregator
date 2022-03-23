@@ -21,3 +21,5 @@ Information about vacancies processing is logged by a [LogInterceptor](src/main/
 ```
 ./gradlew libertyDev
 ```
+
+You can check it with [endpoints.http](endpoints.http).
