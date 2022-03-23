@@ -7,7 +7,7 @@ Aggregate java vacancies in Saint-Petersburg from websites:
 - [Работа.ру](https://www.rabota.ru/vacancy) - [RabotaRuStrategy](src/main/java/org/aggregator/job/model/strategy/RabotaRuStrategy.java)
 - [SuperJob](https://www.superjob.ru/vacancy) - [SuperJobStrategy](src/main/java/org/aggregator/job/model/strategy/SuperJobStrategy.java)
 
-Information about vacancies processing is logged by a [LoggingInvocationHandler](src/main/java/org/aggregator/job/util/LoggingInvocationHandler.java).
+Information about vacancies processing is logged by a [LogInterceptor](src/main/java/org/aggregator/job/util/interceptor/LogInterceptor.java) and [@Log](src/main/java/org/aggregator/job/util/interceptor/Log.java) annotation.
 
 ---
 
