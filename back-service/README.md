@@ -17,9 +17,23 @@ Information about vacancies processing is logged by a [LogInterceptor](src/main/
 
 ---
 
-**Launch**
+### Launch
 ```
 ./gradlew libertyDev
 ```
 
 You can check it with [endpoints.http](endpoints.http).
+
+---
+
+### API documentation
+
+[Swagger Api Documentation](http://localhost:9080/openapi/ui/)
+
+URL: [http://localhost:9080/api](http://localhost:9080/api)
+
+| API          | Method | Description                  | URL                                                               |
+|--------------|--------|------------------------------|-------------------------------------------------------------------|
+| Back Service | GET    | Search vacancies in the city | {URL}/vacancies?position={programmerPosition}&location={cityName} |   
+
+---
